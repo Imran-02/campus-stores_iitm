@@ -87,10 +87,11 @@
     ["Requests", "clipboard-list"],
     ["Inventory", "package"],
     ["Loan register", "book-open"],
+    ["Shift handover", "clipboard-list"],
     ["Desk book", "messages-square"],
   ];
   const original = () => ({
-    version: 1,
+    version: 2,
     tab: "Requests",
     phase: 0,
     selected: "",
@@ -103,10 +104,14 @@
         who: "Tara Shah",
         due: "Sat 10 am",
         back: false,
+        needsVerification: false,
+        verificationNote: "",
       },
     ],
     notes: [],
     editing: false,
+    verifying: null,
+    verificationFor: null,
     onlyOpen: true,
     notice: "Sample shift · All records are fictional.",
   });
@@ -251,11 +256,7 @@
           "asset",
           available.map((a) => [a.id, a.id + " · " + a.type]),
         ) +
-        select(
-          "Collected by",
-          "who",
-          people.map((p) => [p, p]),
-        ) +
+        select("Collected by", "who", people.map((p) => [p, p])) +
         select(
           "Return by",
           "due",
@@ -284,14 +285,110 @@
       .slice()
       .reverse();
     if (!shown.length) html += "<p>No outstanding slips.</p>";
-    for (const l of shown)
+    for (const l of shown) {
+      let right;
+      if (l.back) right = badge("Returned and recorded", true);
+      else if (l.needsVerification)
+        right = badge("Reported · waiting for verification");
+      else right = btn("Verify return", "verify-return", String(l.num), "primary");
       html += row(
         "L-" + l.num + " · " + l.asset,
         l.req + " · " + l.who + " · Due " + l.due,
-        l.back
-          ? badge("Returned")
-          : btn("Record return", "return", String(l.num)),
+        right,
       );
+    }
+    return html;
+  }
+  function handover() {
+    let html = head(
+      "Shift handover",
+      "Outstanding equipment grouped by approved request",
+    );
+    const pending = s.loans.filter((l) => !l.back);
+    if (!pending.length)
+      return html + '<div class="handover-summary good-summary">No outstanding equipment. The handover is clear.</div>'; 
+
+    const grouped = requests
+      .map((r) => ({ r, loans: pending.filter((l) => l.req === r.id) }))
+      .filter((g) => g.loans.length);
+
+    for (const { r, loans } of grouped) {
+      html +=
+        '<section class="handover-group"><h3>' +
+        r.id +
+        " · " +
+        esc(r.club) +
+        '</h3><p class="handover-due">Due ' +
+        esc(r.due) +
+        "</p>";
+      for (const l of loans) {
+        const status = l.needsVerification
+          ? badge("Reported returned · waiting for physical verification")
+          : badge("Still outstanding");
+        let action = "";
+        if (l.needsVerification)
+          action = btn("Check physical item", "verify-return", String(l.num), "primary");
+        else
+          action =
+            btn("Verify return", "verify-return", String(l.num), "primary") +
+            '<button type="button" data-action="needs-verification" data-val="' +
+            l.num +
+            '" class="secondary">Needs verification</button>';
+        html +=
+          '<div class="handover-item"><div><strong>' +
+          esc(l.asset) +
+          '</strong><small>Borrower: ' +
+          esc(l.who) +
+          " · Due " +
+          esc(l.due) +
+          " · L-" +
+          l.num +
+          "</small>" +
+          (l.verificationNote
+            ? '<small class="handover-note">Note: ' + esc(l.verificationNote) + "</small>"
+            : "") +
+          '</div><div class="handover-actions">' + status + action + "</div></div>";
+      }
+      html += "</section>";
+    }
+
+    if (s.verificationFor !== null) {
+      const l = s.loans.find((loan) => loan.num === s.verificationFor);
+      if (l && !l.back)
+        html +=
+          '<div class="verification-panel"><h3>Mark for physical verification</h3><p>' +
+          esc(l.asset) +
+          " · L-" +
+          l.num +
+          '</p><form data-needs-verification><div class="form"><label class="full"><span>Short note</span><textarea name="note" rows="2" maxlength="400" required></textarea></label></div><div class="buttons">' +
+          '<button type="submit" class="primary">Mark needs verification</button>' +
+          btn("Cancel", "cancel-verification") +
+          "</div></form></div>";
+    }
+
+    if (s.verifying !== null) {
+      const l = s.loans.find((loan) => loan.num === s.verifying);
+      if (l && !l.back)
+        html +=
+          '<div class="verification-panel"><h3>Confirm physical item</h3><p>Loan ' +
+          esc(l.asset) +
+          " · L-" +
+          l.num +
+          '</p><form data-verify><div class="form"><label class="full"><span>Type the physical item ID exactly (for example ' +
+          esc(l.asset) +
+          ')</span><input name="physicalId" autocomplete="off" required /></label><label class="full"><span>Optional verification note</span><textarea name="note" rows="2" maxlength="400"></textarea></label></div><div class="buttons">' +
+          '<button type="submit" class="primary">Confirm verified return</button>' +
+          btn("Cancel", "cancel-verification") +
+          "</div></form></div>";
+    }
+
+    const completed = s.loans.filter((l) => l.back);
+    if (completed.length) {
+      html += '<section class="handover-completed"><h3>Returned and recorded</h3>';
+      for (const l of completed)
+        html += '<div class="handover-item"><div><strong>' + esc(l.asset) + '</strong><small>' + esc(l.req) + " · " + esc(l.who) + " · L-" + l.num + "</small></div>" + badge("Returned and recorded", true) + "</div>";
+      html += "</section>";
+    }
     return html;
   }
   function deskbook() {
@@ -337,6 +434,7 @@
     Requests: requestPage,
     Inventory: inventory,
     "Loan register": register,
+    "Shift handover": handover,
     "Desk book": deskbook,
   };
   function paint() {
@@ -385,14 +483,25 @@
         break;
       case "advance":
         if (s.phase < 2) s.phase++;
+        if (s.phase === 1) {
+          for (const l of s.loans)
+            if (!l.back && l.req === "RQ-214" && (l.asset === "PR-04" || l.asset === "SP-02")) {
+              l.needsVerification = true;
+              l.verificationNote = "Kabir reported this item returned at 7:30 pm; physical check is still pending.";
+            }
+        }
         s.notice = "Shift time updated.";
         break;
       case "tab":
         s.tab = v;
         s.editing = false;
+        s.verifying = null;
+        s.verificationFor = null;
         break;
       case "close":
         s.selected = "";
+        s.verifying = null;
+        s.verificationFor = null;
         break;
       case "request":
         s.selected = v;
@@ -406,13 +515,18 @@
       case "scope":
         s.onlyOpen = v === "0";
         break;
-      case "return": {
-        const l = s.loans.find((l) => l.num === Number(v));
-        if (!l || l.back) return;
-        l.back = true;
-        s.notice = l.asset + " returned to stock. Slip L-" + l.num + " closed.";
+      case "verify-return":
+        s.verifying = Number(v);
+        s.verificationFor = null;
         break;
-      }
+      case "needs-verification":
+        s.verificationFor = Number(v);
+        s.verifying = null;
+        break;
+      case "cancel-verification":
+        s.verifying = null;
+        s.verificationFor = null;
+        break;
     }
     commit();
   });
@@ -431,6 +545,34 @@
       if (!text) return;
       s.notes.push({ phase: s.phase, text });
       commit("Handover note saved.");
+      return;
+    }
+    if (f.matches("[data-verify]")) {
+      const physicalId = String(form.get("physicalId")).trim();
+      const note = String(form.get("note")).trim();
+      const l = s.loans.find((loan) => loan.num === s.verifying);
+      if (!l) return;
+      if (physicalId !== l.asset) {
+        s.notice = "Wrong physical item ID. " + l.asset + " was not returned.";
+        commit();
+        return;
+      }
+      l.back = true;
+      l.needsVerification = false;
+      l.verificationNote = note;
+      s.verifying = null;
+      s.verificationFor = null;
+      commit("Verified return: " + l.asset + " is back at the desk and the loan is closed.");
+      return;
+    }
+    if (f.matches("[data-needs-verification]")) {
+      const note = String(form.get("note")).trim();
+      const l = s.loans.find((loan) => loan.num === s.verificationFor);
+      if (!l || !note) return;
+      l.needsVerification = true;
+      l.verificationNote = note;
+      s.verificationFor = null;
+      commit("" + l.asset + " remains on loan and is marked for physical verification.");
       return;
     }
     if (!f.matches("[data-issue]")) return;
@@ -456,14 +598,14 @@
       return;
     }
     const num = Math.max(...s.loans.map((l) => l.num)) + 1;
-    s.loans.push({ num, req, asset, who, due, back: false });
+    s.loans.push({ num, req, asset, who, due, back: false, needsVerification: false, verificationNote: "" });
     s.editing = false;
     commit("Issued " + asset + " to " + who + " on slip L-" + num + ".");
   });
   function restore(d) {
     if (
       !d ||
-      d.version !== 1 ||
+      d.version !== 2 ||
       !Object.hasOwn(screens, d.tab) ||
       !shifts[d.phase] ||
       (d.selected && !getReq(d.selected)) ||
@@ -482,7 +624,11 @@
     s = {
       ...original(),
       ...d,
-      loans: d.loans.map((l) => ({ ...l })),
+      loans: d.loans.map((l) => ({
+        ...l,
+        needsVerification: Boolean(l.needsVerification),
+        verificationNote: typeof l.verificationNote === "string" ? l.verificationNote : "",
+      })),
       notes: d.notes.map((n) => ({ ...n })),
     };
     paint();

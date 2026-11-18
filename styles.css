@@ -1,114 +1,203 @@
+
+/* =========================================
+   CAMPUS STORES — PREMIUM DESIGN SYSTEM
+   ========================================= */
+
 :root {
-  color-scheme: light dark;
-  background: light-dark(#f0f2f1, #191e21);
+  color-scheme: light;
+  --app-bg: #f5f7fb;
+  --surface: #ffffff;
+  --surface-soft: #f8f9fc;
+  --surface-hover: #f1f4fa;
+
+  --text-primary: #172033;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: #eef2ff;
+
+  --border: #e5e9f2;
+  --border-strong: #d8deeb;
+
+  --success: #15803d;
+  --success-bg: #ecfdf3;
+
+  --warning: #b45309;
+  --warning-bg: #fffbeb;
+
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+
+  --radius-sm: 7px;
+  --radius-md: 11px;
+  --radius-lg: 15px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.08);
 }
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  padding: clamp(10px, 3vw, 44px) clamp(6px, 3vw, 36px);
+  padding: clamp(12px, 3vw, 42px);
+  background: var(--app-bg);
+  color: var(--text-primary);
+  font-family: Inter, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
 body > main {
-  max-width: 1060px;
+  max-width: 1240px;
   margin: 0 auto;
 }
+
 .icon-library {
   position: absolute;
   overflow: hidden;
   pointer-events: none;
 }
+
 .store-icon {
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2;
+  stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
+/* =========================================
+   APPLICATION SHELL
+   ========================================= */
+
 #campus-stores {
-  color-scheme: light dark;
-  --ink: light-dark(#202c35, #ecf0f0);
-  --quiet: light-dark(#526370, #b9c5cb);
-  --paper: light-dark(#fff, #232a30);
-  --desk: light-dark(#f3f5f5, #1d2328);
-  --nav: light-dark(#eaf0f1, #29333b);
-  --sel: light-dark(#233e4c, #c5dce4);
-  --inv: light-dark(#fff, #172b34);
-  --line: light-dark(#d2dcdf, #475158);
-  --memo: light-dark(#fff3d8, #3d3426);
-  --memotxt: light-dark(#65491e, #ead4a5);
-  --mark: light-dark(#bd502f, #f2a585);
-  --ok: light-dark(#e3f1e8, #2d4838);
-  --oktxt: light-dark(#25523d, #bedac8);
-  background: var(--paper);
+  --ink: var(--text-primary);
+  --quiet: var(--text-secondary);
+  --paper: var(--surface);
+  --desk: var(--surface-soft);
+  --nav: #fafbfe;
+  --sel: var(--accent);
+  --inv: #ffffff;
+  --line: var(--border);
+  --memo: var(--warning-bg);
+  --memotxt: var(--warning);
+  --mark: var(--accent);
+  --ok: var(--success-bg);
+  --oktxt: var(--success);
+
+  background: var(--surface);
   color: var(--ink);
-  font:
-    14px/1.48 "Inter",
-    "Arial",
-    sans-serif;
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  font: 14px/1.55 Inter, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  border: 1px solid var(--border);
+  border-radius: 18px;
   overflow: hidden;
+  box-shadow: var(--shadow-lg);
   container-type: inline-size;
 }
+
 #campus-stores * {
   box-sizing: border-box;
 }
+
 #campus-stores [hidden] {
   display: none !important;
 }
+
 #campus-stores h1,
 #campus-stores h2,
 #campus-stores h3,
 #campus-stores p {
   margin: 0;
 }
+
 #campus-stores h1 {
-  font:
-    600 clamp(24px, 4cqw, 33px)/1.13 "Archivo",
-    system-ui,
-    sans-serif;
-  letter-spacing: -0.05em;
+  font-size: clamp(23px, 3cqw, 29px);
+  font-weight: 750;
+  letter-spacing: -1.2px;
+  line-height: 1.2;
 }
+
 #campus-stores h2 {
-  font-size: 20px;
-  letter-spacing: -0.03em;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
 }
+
 #campus-stores h3 {
   font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
 }
+
 #campus-stores .muted,
 #campus-stores small {
   color: var(--quiet);
 }
+
 #campus-stores small {
   font-size: 12px;
 }
+
+/* =========================================
+   CANDIDATE BRIEF
+   ========================================= */
+
 #campus-stores .examstrip {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 4px 16px;
+  align-items: center;
   flex-wrap: wrap;
-  background: var(--desk);
-  border-bottom: 1px solid var(--line);
-  padding: 9px 18px;
-  color: var(--quiet);
-  font-size: 13px;
+  gap: 8px 16px;
+  padding: 10px 24px;
+  background: #f8f9ff;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.15px;
 }
+
 #campus-stores details[open] {
   width: 100%;
 }
+
 #campus-stores summary {
-  font-weight: 650;
-  color: var(--sel);
+  color: var(--accent);
   cursor: pointer;
+  font-weight: 650;
+  transition: color 0.2s ease;
 }
+
+#campus-stores summary:hover {
+  color: var(--accent-hover);
+}
+
 #campus-stores .briefcopy {
-  color: var(--ink);
-  max-width: 79ch;
-  padding: 12px 0 5px;
   display: grid;
-  gap: 8px;
+  gap: 10px;
+  max-width: 80ch;
+  padding: 16px 0 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
 }
+
+#campus-stores .briefcopy h2 {
+  color: var(--text-primary);
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+
 #campus-stores .mast,
 #campus-stores .brandblock,
 #campus-stores .shift,
@@ -117,52 +206,104 @@ body > main {
 #campus-stores .buttons {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
+
 #campus-stores .mast {
-  padding: 17px 20px;
+  padding: 22px 26px;
   justify-content: space-between;
   flex-wrap: wrap;
+  background: var(--surface);
 }
+
+#campus-stores .brandblock {
+  gap: 13px;
+}
+
 #campus-stores .brandmark {
-  background: var(--mark);
-  color: var(--inv);
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   display: grid;
   place-items: center;
-  border-radius: 9px;
+  background: var(--accent);
+  color: white;
+  border-radius: 13px;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
 }
+
 #campus-stores .brandmark svg {
-  width: 25px;
-  height: 25px;
+  width: 26px;
+  height: 26px;
 }
+
+#campus-stores .brandblock .muted {
+  margin-top: 3px;
+  font-size: 12px;
+}
+
 #campus-stores .clock {
   display: grid;
+  gap: 2px;
   text-align: right;
+  padding: 9px 14px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
 }
+
+#campus-stores .clock small {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
 #campus-stores .clock strong {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
+
+/* =========================================
+   SHIFT BANNER
+   ========================================= */
+
 #campus-stores .shift {
-  background: var(--memo);
-  color: var(--memotxt);
-  padding: 12px 19px;
+  padding: 15px 26px;
   justify-content: space-between;
-  border-block: 1px solid var(--line);
+  background: #f5f6ff;
+  color: #3730a3;
+  border-block: 1px solid #e3e7ff;
 }
+
 #campus-stores .shift div {
-  max-width: 67ch;
+  max-width: 70ch;
 }
+
 #campus-stores .shift b {
+  display: block;
   font-size: 13px;
+  font-weight: 750;
+  margin-bottom: 2px;
 }
+
+#campus-stores .shift p {
+  font-size: 12px;
+  color: #6366a5;
+}
+
 #campus-stores .shift button {
-  background: transparent;
-  border-color: var(--memotxt);
-  color: var(--memotxt);
   flex-shrink: 0;
+  background: white;
+  color: var(--accent);
+  border: 1px solid #c7d2fe;
 }
+
+/* =========================================
+   BUTTONS AND INPUTS
+   ========================================= */
+
 #campus-stores button,
 #campus-stores select,
 #campus-stores input,
@@ -170,202 +311,580 @@ body > main {
   font: inherit;
   color: var(--ink);
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background: var(--paper);
   min-width: 0;
-  padding: 7px 9px;
+  padding: 9px 12px;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
 }
+
 #campus-stores button {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 650;
   cursor: pointer;
 }
+
 #campus-stores button:hover {
-  border-color: var(--sel);
+  border-color: #a5b4fc;
+  background-color: var(--accent-soft);
+  color: var(--accent);
 }
+
+#campus-stores button:active {
+  transform: translateY(1px);
+}
+
+#campus-stores button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 #campus-stores .primary {
-  background: var(--sel);
-  color: var(--inv);
-  border-color: var(--sel);
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.13);
 }
-#campus-stores :is(button, input, textarea, select, summary):focus-visible {
-  outline: 3px solid var(--mark);
+
+#campus-stores .primary:hover {
+  background: var(--accent-hover);
+  color: white;
+  border-color: var(--accent-hover);
+}
+
+#campus-stores .secondary {
+  background: var(--warning-bg);
+  color: var(--warning);
+  border-color: #fde68a;
+}
+
+#campus-stores :is(
+  button,
+  input,
+  textarea,
+  select,
+  summary
+):focus-visible {
+  outline: 3px solid rgba(99, 102, 241, 0.2);
   outline-offset: 2px;
 }
+
+#campus-stores input,
+#campus-stores select,
+#campus-stores textarea {
+  font-size: 13px;
+}
+
+#campus-stores input::placeholder,
+#campus-stores textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* =========================================
+   MAIN LAYOUT AND NAVIGATION
+   ========================================= */
+
 #campus-stores .shell {
   display: grid;
-  grid-template-columns: 155px minmax(0, 1fr);
-  min-height: 315px;
+  grid-template-columns: 205px minmax(0, 1fr);
+  min-height: 440px;
+  background: var(--surface);
 }
+
 #campus-stores nav {
-  background: var(--nav);
-  border-right: 1px solid var(--line);
-  padding: 12px 8px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
+  padding: 22px 13px;
+  background: #fafbfe;
+  border-right: 1px solid var(--border);
 }
+
 #campus-stores nav button {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 11px;
+  width: 100%;
+  padding: 10px 12px;
   text-align: left;
-  border: 1px solid transparent;
   background: transparent;
-  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 550;
 }
+
+#campus-stores nav button:hover {
+  background: #f0f2ff;
+  color: var(--accent);
+}
+
 #campus-stores nav button[aria-pressed="true"] {
-  background: var(--sel);
-  color: var(--inv);
+  background: var(--accent-soft);
+  border-color: #e0e7ff;
+  color: var(--accent);
+  font-weight: 700;
 }
+
 #campus-stores nav svg {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
 }
+
+/* =========================================
+   PAGE CONTENT
+   ========================================= */
+
 #campus-stores .page {
-  padding: 17px 17px 20px;
   min-width: 0;
+  padding: 26px 28px 30px;
 }
-#campus-stores .sectionhead,
-#campus-stores .statusbar {
+
+#campus-stores .sectionhead {
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-bottom: 22px;
+  gap: 12px;
 }
-#campus-stores .sectionhead {
-  margin-bottom: 12px;
-}
+
 #campus-stores .sectionhead small {
-  margin-top: 2px;
   display: block;
+  margin-top: 5px;
+  font-size: 12px;
 }
+
+/* =========================================
+   ROWS AND RECORDS
+   ========================================= */
+
 #campus-stores .row {
-  border-top: 1px solid var(--line);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
-  padding: 9px 0;
+  gap: 14px;
+  padding: 15px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 9px;
+  background: var(--surface);
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
 }
-#campus-stores .row small,
-#campus-stores label span {
+
+#campus-stores .row:hover {
+  border-color: #c7d2fe;
+  background: #fdfdff;
+  box-shadow: var(--shadow-sm);
+}
+
+#campus-stores .row strong {
   display: block;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--text-primary);
 }
+
+#campus-stores .row small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+}
+
 #campus-stores .tag {
-  background: var(--desk);
-  color: var(--quiet);
-  font-size: 12px;
-  padding: 3px 7px;
-  border-radius: 5px;
   display: inline-block;
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.5;
 }
+
 #campus-stores .good {
-  background: var(--ok);
-  color: var(--oktxt);
+  background: var(--success-bg);
+  color: var(--success);
 }
+
+/* =========================================
+   RECORD DETAILS
+   ========================================= */
+
 #campus-stores .record {
-  margin-top: 14px;
-  padding: 12px 13px;
-  background: var(--desk);
-  border-left: 3px solid var(--sel);
+  margin-top: 15px;
+  padding: 20px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-md);
 }
+
+#campus-stores .record h3 {
+  margin: 7px 0;
+  font-size: 17px;
+}
+
 #campus-stores .record p {
-  margin-top: 5px;
+  margin-top: 7px;
+  color: var(--text-secondary);
+  font-size: 13px;
 }
+
+#campus-stores .record ul {
+  padding-left: 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+#campus-stores .record li {
+  padding: 3px 0;
+}
+
+/* =========================================
+   FILTERS AND BUTTON GROUPS
+   ========================================= */
+
 #campus-stores .buttons {
   flex-wrap: wrap;
-  margin: 10px 0;
+  margin: 15px 0;
+  gap: 8px;
 }
+
 #campus-stores .buttons button[aria-pressed="true"] {
-  background: var(--sel);
-  color: var(--inv);
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: #c7d2fe;
 }
+
 #campus-stores .buttons label {
   display: flex;
-  gap: 6px;
   align-items: center;
+  gap: 9px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
 }
+
+/* =========================================
+   FORMS
+   ========================================= */
+
 #campus-stores .form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 10px 0;
+  gap: 16px;
+  margin: 18px 0;
 }
+
 #campus-stores .form label {
-  font-size: 13px;
-  font-weight: 600;
+  display: block;
   min-width: 0;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--text-primary);
 }
+
 #campus-stores .form label span {
-  margin-bottom: 3px;
+  display: block;
+  margin-bottom: 6px;
 }
-#campus-stores .form :is(select, input, textarea) {
+
+#campus-stores .form :is(
+  select,
+  input,
+  textarea
+) {
   width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: white;
   font-weight: 400;
 }
+
 #campus-stores .full {
-  grid-column: 1/-1;
+  grid-column: 1 / -1;
 }
+
 #campus-stores textarea {
   resize: vertical;
+  min-height: 76px;
 }
-#campus-stores .statusbar {
-  background: var(--desk);
-  border-top: 1px solid var(--line);
-  padding: 8px 16px;
-  color: var(--quiet);
+
+/* =========================================
+   SHIFT HANDOVER
+   ========================================= */
+
+#campus-stores .handover-group,
+#campus-stores .handover-completed,
+#campus-stores .verification-panel,
+#campus-stores .handover-summary {
+  padding: 17px;
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: white;
+}
+
+#campus-stores .handover-group h3,
+#campus-stores .handover-completed h3 {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+#campus-stores .handover-due {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+#campus-stores .handover-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 13px 0;
+  border-top: 1px solid var(--border);
+}
+
+#campus-stores .handover-item:first-of-type {
+  margin-top: 12px;
+}
+
+#campus-stores .handover-item strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#campus-stores .handover-item small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+}
+
+#campus-stores .handover-note {
+  color: var(--warning);
+  margin-top: 5px;
+}
+
+#campus-stores .handover-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+#campus-stores .handover-actions .tag {
+  max-width: 220px;
+  white-space: normal;
+}
+
+#campus-stores .verification-panel {
+  background: #fafaff;
+  border-left: 3px solid var(--accent);
+}
+
+#campus-stores .verification-panel h3 {
+  margin-bottom: 6px;
+}
+
+#campus-stores .verification-panel p {
+  color: var(--text-secondary);
   font-size: 12px;
 }
+
+#campus-stores .handover-summary {
+  background: var(--success-bg);
+  color: var(--success);
+  border-color: #bbf7d0;
+  font-weight: 650;
+}
+
+/* =========================================
+   STATUS BAR
+   ========================================= */
+
+#campus-stores .statusbar {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 22px;
+  background: #fafbfe;
+  border-top: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
 #campus-stores .statusbar span {
   flex: 1 1 160px;
 }
+
 #campus-stores .statusbar button {
-  font-size: 12px;
   background: transparent;
+  border-color: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
 }
-@container (max-width:650px) {
+
+#campus-stores .statusbar button:hover {
+  background: var(--danger-bg);
+  border-color: #fecaca;
+  color: var(--danger);
+}
+
+/* =========================================
+   RESPONSIVE — TABLET
+   ========================================= */
+
+@container (max-width: 760px) {
   #campus-stores .shell {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: 1fr;
   }
+
   #campus-stores nav {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 7px;
+    padding: 10px 14px;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
   }
+
   #campus-stores nav button {
-    gap: 4px;
-    padding: 5px 7px;
+    width: auto;
+    gap: 7px;
+    padding: 8px 10px;
   }
+
+  #campus-stores .page {
+    padding: 22px 20px;
+  }
+}
+
+/* =========================================
+   RESPONSIVE — MOBILE
+   ========================================= */
+
+@container (max-width: 480px) {
+  #campus-stores {
+    border-radius: 12px;
+  }
+
+  #campus-stores .mast {
+    padding: 16px;
+  }
+
+  #campus-stores .brandmark {
+    width: 39px;
+    height: 39px;
+  }
+
+  #campus-stores .brandblock {
+    gap: 10px;
+  }
+
+  #campus-stores .clock {
+    padding: 7px 9px;
+  }
+
   #campus-stores .shift {
+    padding: 13px 15px;
+    align-items: flex-start;
     flex-wrap: wrap;
   }
-  #campus-stores .page {
-    padding: 14px 12px;
+
+  #campus-stores .shift button {
+    width: 100%;
   }
-  #campus-stores .mast {
-    padding: 12px;
+
+  #campus-stores nav {
+    gap: 4px;
+    padding: 9px;
   }
-  #campus-stores .examstrip,
-  #campus-stores .shift {
-    padding: 9px 12px;
-  }
-}
-@container (max-width:420px) {
-  #campus-stores .form {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  #campus-stores .brandmark {
-    display: none;
-  }
-  #campus-stores .row {
+
+  #campus-stores nav button {
+    padding: 7px 8px;
+    font-size: 11px;
     gap: 5px;
   }
+
+  #campus-stores nav svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  #campus-stores .page {
+    padding: 18px 13px;
+  }
+
+  #campus-stores .sectionhead {
+    margin-bottom: 16px;
+  }
+
+  #campus-stores .sectionhead h2 {
+    font-size: 19px;
+  }
+
+  #campus-stores .row {
+    padding: 12px 10px;
+    gap: 8px;
+  }
+
+  #campus-stores .row small {
+    font-size: 10px;
+  }
+
+  #campus-stores .form {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  #campus-stores .full {
+    grid-column: auto;
+  }
+
+  #campus-stores .handover-item {
+    grid-template-columns: 1fr;
+  }
+
+  #campus-stores .handover-actions {
+    justify-content: flex-start;
+  }
+
+  #campus-stores .statusbar {
+    padding: 12px 14px;
+  }
+
+  #campus-stores .examstrip {
+    padding: 9px 14px;
+  }
 }
+
+/* =========================================
+   ACCESSIBILITY AND INTERACTION
+   ========================================= */
+
 @media (pointer: coarse) {
   #campus-stores button,
   #campus-stores select {
     min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #campus-stores *,
+  #campus-stores *::before,
+  #campus-stores *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }
